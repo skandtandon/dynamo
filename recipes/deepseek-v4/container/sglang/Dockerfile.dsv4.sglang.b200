@@ -31,9 +31,11 @@ RUN pip install --no-cache-dir --force-reinstall --no-deps \
     python3 -c "from dynamo._core import get_tool_parser_names; assert 'deepseek_v4' in get_tool_parser_names(), 'V4 parser missing!'; print('V4 parser verified')"
 
 COPY --from=dynamo_src /workspace/components/src/dynamo /workspace/components/src/dynamo
+# attributions and license from dynamo
+COPY --from=dynamo_src --chmod=664 --chown=dynamo:0 /workspace/ATTRIBUTIONS.md  /workspace/ATTRIBUTIONS-Rust.md /workspace/ATTRIBUTIONS-Python.md /workspace/LICENSE /workspace/
 
 # Avoid /workspace/sglang shadowing the dynamo Python package.
-ENV PYTHONPATH=/workspace/sglang/python:/workspace/components/src:${PYTHONPATH:-}
+ENV PYTHONPATH=/workspace/sglang/python:/workspace/components/src
 
 ENV SGLANG_JIT_DEEPGEMM_PRECOMPILE=0 \
     SGLANG_JIT_DEEPGEMM_FAST_WARMUP=1
